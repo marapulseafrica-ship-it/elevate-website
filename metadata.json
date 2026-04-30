@@ -1,0 +1,7 @@
+{
+  "name": "ElevateAI - Transforming African Business",
+  "description": "A professional landing page for an AI solutions agency targeting the African market, featuring AI-powered business consulting.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
