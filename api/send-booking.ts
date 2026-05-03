@@ -169,6 +169,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     </div>
   `);
 
+  // Save booking to Supabase NOW so future availability checks see it
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  if (url && key) {
+    const supabase = createClient(url, key);
+    const { error: dbError } = await supabase.from('elevate_leads').insert({
+      type: 'booking',
+      name,
+      email,
+      business_name: businessName,
+      industry,
+      goals,
+      service_type: serviceType,
+      booking_date: bookingDate,
+      booking_time: bookingTime,
+    });
+    if (dbError) console.error('Lead save error:', dbError.message);
+  }
+
   try {
     await Promise.all([
       sendEmail(apiKey, getAdmins(serviceType), `New ${serviceType} Booked — ${name} (${businessName})`, adminHtml),

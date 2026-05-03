@@ -97,19 +97,6 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
         return;
       }
 
-      // Slot is available — save to DB (non-fatal)
-      supabase.from('elevate_leads').insert({
-        type: 'booking',
-        name: formData.name,
-        email: formData.email,
-        business_name: formData.businessName,
-        industry: formData.industry,
-        goals: formData.goals,
-        service_type: formData.serviceType,
-        booking_date: formData.bookingDate,
-        booking_time: formData.bookingTime,
-      }).then(({ error }) => { if (error) console.warn('Lead save failed:', error.message); });
-
       setWebhookResponse(`Your ${formData.serviceType} has been booked for ${formData.bookingDate} at ${formData.bookingTime} SAST.\n\nWe'll send a confirmation to ${formData.email} shortly.`);
       setSubmitted(true);
     } catch (err: any) {
