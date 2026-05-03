@@ -91,6 +91,12 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
         return;
       }
 
+      if (result.error) {
+        setAvailabilityError(`Server error: ${result.error}`);
+        setIsSubmitting(false);
+        return;
+      }
+
       // Slot is available — save to DB (non-fatal)
       supabase.from('elevate_leads').insert({
         type: 'booking',
@@ -106,10 +112,8 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
 
       setWebhookResponse(`Your ${formData.serviceType} has been booked for ${formData.bookingDate} at ${formData.bookingTime} SAST.\n\nWe'll send a confirmation to ${formData.email} shortly.`);
       setSubmitted(true);
-    } catch {
-      // Network error — still show success so the user isn't stuck
-      setWebhookResponse(`Your ${formData.serviceType} request has been received.\n\nOur team will reach out to ${formData.email} to confirm your appointment.`);
-      setSubmitted(true);
+    } catch (err: any) {
+      setAvailabilityError(`Request failed: ${err.message || 'Unknown error'}. Please try again.`);
     } finally {
       setIsSubmitting(false);
     }
