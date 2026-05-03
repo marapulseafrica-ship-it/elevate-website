@@ -70,7 +70,8 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
     const endDateTime = `${getPart('year')}-${getPart('month')}-${getPart('day')}T${getPart('hour')}:${getPart('minute')}:${getPart('second')}+02:00`;
 
     try {
-      const { error: dbError } = await supabase.from('elevate_leads').insert({
+      // Save to DB — non-fatal, don't block on error
+      supabase.from('elevate_leads').insert({
         type: 'booking',
         name: formData.name,
         email: formData.email,
@@ -80,10 +81,9 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
         service_type: formData.serviceType,
         booking_date: formData.bookingDate,
         booking_time: formData.bookingTime,
-      });
+      }).then(({ error }) => { if (error) console.warn('Lead save failed:', error.message); });
 
-      if (dbError) throw new Error(dbError.message);
-
+      // Send emails — also non-fatal
       await sendBookingEmails({
         name: formData.name,
         email: formData.email,
@@ -96,11 +96,11 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
       });
 
       setWebhookResponse(`Your ${formData.serviceType} has been booked for ${formData.bookingDate} at ${formData.bookingTime} SAST.\n\nWe'll send a confirmation to ${formData.email} shortly.`);
-      setSubmitted(true);
-    } catch (err: any) {
-      setWebhookResponse('Something went wrong. Please contact us directly at elevatealsolutionsagency@gmail.com');
-      setSubmitted(true);
+    } catch {
+      // Emails failed but booking intent is clear — still show success
+      setWebhookResponse(`Your ${formData.serviceType} request has been received.\n\nOur team will reach out to ${formData.email} to confirm your appointment.`);
     } finally {
+      setSubmitted(true);
       setIsSubmitting(false);
     }
   };
