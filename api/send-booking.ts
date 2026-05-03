@@ -183,7 +183,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     await addToCalendars(serviceType, name, businessName, goals, bookingDate, bookingTime);
   } catch (err: any) {
-    console.error('Calendar event creation failed:', err.message);
+    // Temporary: return error so we can debug — remove once calendar works
+    return res.status(200).json({ success: true, calendarError: err.message });
   }
 
   res.status(200).json({ success: true });

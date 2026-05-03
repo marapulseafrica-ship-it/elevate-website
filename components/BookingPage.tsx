@@ -97,7 +97,10 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
         return;
       }
 
-      setWebhookResponse(`Your ${formData.serviceType} has been booked for ${formData.bookingDate} at ${formData.bookingTime} SAST.\n\nWe'll send a confirmation to ${formData.email} shortly.`);
+      const msg = result.calendarError
+        ? `Your ${formData.serviceType} has been booked.\n\nCalendar error (debug): ${result.calendarError}`
+        : `Your ${formData.serviceType} has been booked for ${formData.bookingDate} at ${formData.bookingTime} SAST.\n\nWe'll send a confirmation to ${formData.email} shortly.`;
+      setWebhookResponse(msg);
       setSubmitted(true);
     } catch (err: any) {
       setAvailabilityError(`Request failed: ${err.message || 'Unknown error'}. Please try again.`);

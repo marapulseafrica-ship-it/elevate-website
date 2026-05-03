@@ -3,6 +3,7 @@ export interface BookingResult {
   available?: boolean;
   message?: string;
   error?: string;
+  calendarError?: string;
 }
 
 export async function sendBookingEmails(data: {
