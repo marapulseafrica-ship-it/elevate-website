@@ -1,11 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { createClient } from '@supabase/supabase-js';
 import { google } from 'googleapis';
 import { wrap, row, sendEmail } from './_email';
 
 function getAdmins(serviceType: string): string[] {
   if (serviceType === 'AI Voice Agent') return ['kicaben5@gmail.com'];
   if (serviceType === 'AI Automation')  return ['danielkimara7@gmail.com'];
-  return ['danielkimara7@gmail.com', 'kicaben5@gmail.com']; // Consultation
+  return ['danielkimara7@gmail.com', 'kicaben5@gmail.com'];
 }
 
 function formatTime(time: string): string {
@@ -15,42 +16,31 @@ function formatTime(time: string): string {
   return `${hour}:${m.toString().padStart(2, '0')} ${period} SAST`;
 }
 
-function buildAuth(serviceAccountJson: string, readonly = false) {
-  const credentials = JSON.parse(serviceAccountJson);
-  return new google.auth.GoogleAuth({
-    credentials,
-    scopes: [readonly
-      ? 'https://www.googleapis.com/auth/calendar.readonly'
-      : 'https://www.googleapis.com/auth/calendar'],
-  });
+// Check Supabase leads table for an existing booking at the same date+time.
+// This is the primary availability gate — reliable, no external setup needed.
+async function isSlotAvailable(bookingDate: string, bookingTime: string): Promise<boolean> {
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  if (!url || !key) return true; // not configured → allow
+
+  const supabase = createClient(url, key);
+  const { data, error } = await supabase
+    .from('elevate_leads')
+    .select('id')
+    .eq('type', 'booking')
+    .eq('booking_date', bookingDate)
+    .eq('booking_time', bookingTime)
+    .limit(1);
+
+  if (error) {
+    console.error('Supabase availability check error:', error.message);
+    return true; // fail open
+  }
+
+  return !data || data.length === 0;
 }
 
-async function checkOneCalendar(
-  serviceAccountJson: string,
-  calendarId: string,
-  bookingDate: string,
-  bookingTime: string
-): Promise<boolean> {
-  const auth = buildAuth(serviceAccountJson, true); // readonly scope for freebusy
-  const calendar = google.calendar({ version: 'v3', auth });
-
-  const startISO = `${bookingDate}T${bookingTime}:00+02:00`;
-  const start = new Date(startISO);
-  const end = new Date(start.getTime() + 60 * 60 * 1000);
-
-  const { data } = await calendar.freebusy.query({
-    requestBody: {
-      timeMin: start.toISOString(),
-      timeMax: end.toISOString(),
-      timeZone: 'Africa/Johannesburg',
-      items: [{ id: calendarId }],
-    },
-  });
-
-  const busy = data.calendars?.[calendarId]?.busy ?? [];
-  return busy.length === 0;
-}
-
+// Creates a Google Calendar event — non-fatal, runs after booking is confirmed.
 async function createCalendarEvent(
   serviceAccountJson: string,
   calendarId: string,
@@ -59,7 +49,11 @@ async function createCalendarEvent(
   bookingDate: string,
   bookingTime: string
 ): Promise<void> {
-  const auth = buildAuth(serviceAccountJson, false); // write scope for event creation
+  const credentials = JSON.parse(serviceAccountJson);
+  const auth = new google.auth.GoogleAuth({
+    credentials,
+    scopes: ['https://www.googleapis.com/auth/calendar'],
+  });
   const calendar = google.calendar({ version: 'v3', auth });
 
   const startISO = `${bookingDate}T${bookingTime}:00+02:00`;
@@ -75,27 +69,6 @@ async function createCalendarEvent(
       end:   { dateTime: end.toISOString(),   timeZone: 'Africa/Johannesburg' },
     },
   });
-}
-
-async function isSlotAvailable(serviceType: string, bookingDate: string, bookingTime: string): Promise<boolean> {
-  const danielJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
-  const danielCal  = process.env.GOOGLE_CALENDAR_ID;
-  const broJson    = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BRO;
-  const broCal     = process.env.GOOGLE_CALENDAR_ID_BRO;
-
-  const checkDaniel = serviceType !== 'AI Voice Agent';
-  const checkBro    = serviceType !== 'AI Automation';
-
-  const checks: Promise<boolean>[] = [];
-  if (checkDaniel && danielJson && danielCal)
-    checks.push(checkOneCalendar(danielJson, danielCal, bookingDate, bookingTime));
-  if (checkBro && broJson && broCal)
-    checks.push(checkOneCalendar(broJson, broCal, bookingDate, bookingTime));
-  if (checks.length === 0) return true; // no calendars configured → allow all
-
-  // Let errors bubble up so the handler can return them to the client
-  const results = await Promise.all(checks);
-  return results.every(Boolean);
 }
 
 async function addToCalendars(
@@ -133,15 +106,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'Email not configured' });
 
-  // Check calendar availability
-  let available: boolean;
-  try {
-    available = await isSlotAvailable(serviceType, bookingDate, bookingTime);
-  } catch (err: any) {
-    console.error('Availability check failed:', err.message);
-    return res.status(500).json({ error: `Calendar check failed: ${err.message}` });
-  }
-
+  // Check availability via Supabase
+  const available = await isSlotAvailable(bookingDate, bookingTime);
   if (!available) {
     return res.status(200).json({
       available: false,
@@ -213,7 +179,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: err.message });
   }
 
-  // Calendar event creation is non-fatal — don't block the booking if it fails
+  // Calendar event creation — non-fatal, runs after booking confirmed
   addToCalendars(serviceType, name, businessName, goals, bookingDate, bookingTime)
     .catch((err: any) => console.error('Calendar event creation failed:', err.message));
 
