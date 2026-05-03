@@ -16,31 +16,13 @@ function formatTime(time: string): string {
   return `${hour}:${m.toString().padStart(2, '0')} ${period} SAST`;
 }
 
-// Check Supabase leads table for an existing booking at the same date+time.
-// This is the primary availability gate — reliable, no external setup needed.
-async function isSlotAvailable(bookingDate: string, bookingTime: string): Promise<boolean> {
+function getSupabase() {
   const url = process.env.VITE_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
-  if (!url || !key) return true; // not configured → allow
-
-  const supabase = createClient(url, key);
-  const { data, error } = await supabase
-    .from('elevate_leads')
-    .select('id')
-    .eq('type', 'booking')
-    .eq('booking_date', bookingDate)
-    .eq('booking_time', bookingTime)
-    .limit(1);
-
-  if (error) {
-    console.error('Supabase availability check error:', error.message);
-    return true; // fail open
-  }
-
-  return !data || data.length === 0;
+  if (!url || !key) return null;
+  return createClient(url, key);
 }
 
-// Creates a Google Calendar event — non-fatal, runs after booking is confirmed.
 async function createCalendarEvent(
   serviceAccountJson: string,
   calendarId: string,
@@ -55,11 +37,9 @@ async function createCalendarEvent(
     scopes: ['https://www.googleapis.com/auth/calendar'],
   });
   const calendar = google.calendar({ version: 'v3', auth });
-
   const startISO = `${bookingDate}T${bookingTime}:00+02:00`;
   const start = new Date(startISO);
   const end = new Date(start.getTime() + 60 * 60 * 1000);
-
   await calendar.events.insert({
     calendarId,
     requestBody: {
@@ -71,31 +51,18 @@ async function createCalendarEvent(
   });
 }
 
-async function addToCalendars(
-  serviceType: string,
-  name: string,
-  businessName: string,
-  goals: string,
-  bookingDate: string,
-  bookingTime: string
-): Promise<void> {
+async function addToCalendars(serviceType: string, name: string, businessName: string, goals: string, bookingDate: string, bookingTime: string): Promise<void> {
   const danielJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
   const danielCal  = process.env.GOOGLE_CALENDAR_ID;
   const broJson    = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BRO;
   const broCal     = process.env.GOOGLE_CALENDAR_ID_BRO;
-
-  const addDaniel = serviceType !== 'AI Voice Agent';
-  const addBro    = serviceType !== 'AI Automation';
-
+  const addDaniel  = serviceType !== 'AI Voice Agent';
+  const addBro     = serviceType !== 'AI Automation';
   const summary     = `${serviceType} — ${name} (${businessName})`;
   const description = `Service: ${serviceType}\nClient: ${name}\nBusiness: ${businessName}\nGoals: ${goals}`;
-
   const creates: Promise<void>[] = [];
-  if (addDaniel && danielJson && danielCal)
-    creates.push(createCalendarEvent(danielJson, danielCal, summary, description, bookingDate, bookingTime));
-  if (addBro && broJson && broCal)
-    creates.push(createCalendarEvent(broJson, broCal, summary, description, bookingDate, bookingTime));
-
+  if (addDaniel && danielJson && danielCal) creates.push(createCalendarEvent(danielJson, danielCal, summary, description, bookingDate, bookingTime));
+  if (addBro && broJson && broCal) creates.push(createCalendarEvent(broJson, broCal, summary, description, bookingDate, bookingTime));
   await Promise.all(creates);
 }
 
@@ -106,13 +73,47 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'Email not configured' });
 
-  // Check availability via Supabase
-  const available = await isSlotAvailable(bookingDate, bookingTime);
-  if (!available) {
+  const supabase = getSupabase();
+
+  // Availability check — block if Supabase is not configured
+  if (!supabase) {
+    return res.status(500).json({ error: 'Database not configured. Add VITE_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to Vercel env vars.' });
+  }
+
+  const { data: existing, error: checkError } = await supabase
+    .from('elevate_leads')
+    .select('id')
+    .eq('type', 'booking')
+    .eq('booking_date', bookingDate)
+    .eq('booking_time', bookingTime)
+    .limit(1);
+
+  if (checkError) {
+    return res.status(500).json({ error: `Availability check failed: ${checkError.message}` });
+  }
+
+  if (existing && existing.length > 0) {
     return res.status(200).json({
       available: false,
       message: 'That time slot is already taken. Please choose a different date or time.',
     });
+  }
+
+  // Save booking IMMEDIATELY so concurrent requests see it
+  const { error: insertError } = await supabase.from('elevate_leads').insert({
+    type: 'booking',
+    name,
+    email,
+    business_name: businessName,
+    industry,
+    goals,
+    service_type: serviceType,
+    booking_date: bookingDate,
+    booking_time: bookingTime,
+  });
+
+  if (insertError) {
+    return res.status(500).json({ error: `Failed to save booking: ${insertError.message}` });
   }
 
   const formattedDate = new Date(`${bookingDate}T${bookingTime}:00+02:00`)
@@ -169,25 +170,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     </div>
   `);
 
-  // Save booking to Supabase NOW so future availability checks see it
-  const url = process.env.VITE_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
-  if (url && key) {
-    const supabase = createClient(url, key);
-    const { error: dbError } = await supabase.from('elevate_leads').insert({
-      type: 'booking',
-      name,
-      email,
-      business_name: businessName,
-      industry,
-      goals,
-      service_type: serviceType,
-      booking_date: bookingDate,
-      booking_time: bookingTime,
-    });
-    if (dbError) console.error('Lead save error:', dbError.message);
-  }
-
   try {
     await Promise.all([
       sendEmail(apiKey, getAdmins(serviceType), `New ${serviceType} Booked — ${name} (${businessName})`, adminHtml),
@@ -198,7 +180,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: err.message });
   }
 
-  // Calendar event creation — non-fatal, runs after booking confirmed
   addToCalendars(serviceType, name, businessName, goals, bookingDate, bookingTime)
     .catch((err: any) => console.error('Calendar event creation failed:', err.message));
 
