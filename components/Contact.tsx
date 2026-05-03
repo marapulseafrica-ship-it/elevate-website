@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { Mail, Phone, MessageSquare, Clock, Send, CheckCircle2, Loader2 } from 'lucide-react';
-import { supabase } from '../src/supabaseClient';
 import { sendContactNotification } from '../src/emailService';
 
 const Contact: React.FC = () => {
@@ -23,16 +22,6 @@ const Contact: React.FC = () => {
     setError(null);
 
     try {
-      // Non-fatal DB save
-      supabase.from('elevate_leads').insert({
-        type: 'contact',
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone || null,
-        business_name: formData.business,
-        message: formData.message,
-      }).then(({ error }) => { if (error) console.warn('Lead save failed:', error.message); });
-
       await sendContactNotification({
         name: formData.name,
         email: formData.email,

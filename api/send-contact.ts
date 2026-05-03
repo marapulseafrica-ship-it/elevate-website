@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { createClient } from '@supabase/supabase-js';
 import { wrap, row, sendEmail } from './_email';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -8,7 +9,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'Email not configured' });
 
-  const html = wrap(`
+  // Save to Supabase server-side so it appears in admin leads immediately
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  if (url && key) {
+    const supabase = createClient(url, key);
+    const { error: dbError } = await supabase.from('elevate_leads').insert({
+      type: 'contact',
+      name,
+      email,
+      phone: phone || null,
+      business_name: business,
+      message,
+    });
+    if (dbError) console.error('Lead save error:', dbError.message);
+  }
+
+  const adminHtml = wrap(`
     <h2 style="margin:0 0 6px;font-size:22px;font-weight:800;color:#0a1a35;">New enquiry received</h2>
     <p style="margin:0 0 24px;font-size:14px;color:#64748b;">Someone has reached out through the website contact form.</p>
     <table width="100%" cellpadding="0" cellspacing="0" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;margin-bottom:28px;">
@@ -27,7 +44,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     await sendEmail(apiKey, ['danielkimara7@gmail.com', 'kicaben5@gmail.com'],
-      `New Enquiry: ${name} from ${business}`, html);
+      `New Enquiry: ${name} from ${business}`, adminHtml);
     res.status(200).json({ success: true });
   } catch (err: any) {
     console.error('Email error:', err.message);
