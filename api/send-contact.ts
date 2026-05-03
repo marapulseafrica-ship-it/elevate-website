@@ -43,7 +43,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   `);
 
   try {
-    await sendEmail(apiKey, ['danielkimara7@gmail.com', 'kicaben5@gmail.com'],
+    await sendEmail(apiKey, 'danielkimara7@gmail.com',
       `New Enquiry: ${name} from ${business}`, adminHtml);
     res.status(200).json({ success: true });
   } catch (err: any) {
