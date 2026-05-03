@@ -9,20 +9,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'Email not configured' });
 
-  // Save to Supabase server-side so it appears in admin leads immediately
   const url = process.env.VITE_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
-  if (url && key) {
-    const supabase = createClient(url, key);
-    const { error: dbError } = await supabase.from('elevate_leads').insert({
-      type: 'contact',
-      name,
-      email,
-      phone: phone || null,
-      business_name: business,
-      message,
-    });
-    if (dbError) console.error('Lead save error:', dbError.message);
+  const supabase = url && key ? createClient(url, key) : null;
+
+  // Dedup: block if same email submitted a contact in the last 60 seconds
+  if (supabase) {
+    const cutoff = new Date(Date.now() - 60_000).toISOString();
+    const { data: recent } = await supabase
+      .from('elevate_leads')
+      .select('id')
+      .eq('type', 'contact')
+      .eq('email', email)
+      .gte('created_at', cutoff)
+      .limit(1);
+    if (recent && recent.length > 0) {
+      return res.status(200).json({ success: true }); // silently ignore duplicate
+    }
   }
 
   const adminHtml = wrap(`
@@ -45,9 +48,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     await sendEmail(apiKey, ['danielkimara7@gmail.com', 'kicaben5@gmail.com'],
       `New Enquiry: ${name} from ${business}`, adminHtml);
-    res.status(200).json({ success: true });
   } catch (err: any) {
     console.error('Email error:', err.message);
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
+
+  // Save to Supabase after email succeeds
+  if (supabase) {
+    const { error: dbError } = await supabase.from('elevate_leads').insert({
+      type: 'contact',
+      name,
+      email,
+      phone: phone || null,
+      business_name: business,
+      message,
+    });
+    if (dbError) console.error('Lead save error:', dbError.message);
+  }
+
+  res.status(200).json({ success: true });
 }
