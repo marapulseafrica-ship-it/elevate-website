@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Workflow, Mic, ArrowRight, ArrowLeft, CheckCircle2, Loader2, Send, Building2, MessageSquare, Calendar, Clock, Search } from 'lucide-react';
 import { supabase } from '../src/supabaseClient';
 import { sendBookingEmails } from '../src/emailService';
+import type { BookingResult } from '../src/emailService';
 
 interface BookingPageProps {
   initialService?: string;
@@ -15,6 +16,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [webhookResponse, setWebhookResponse] = useState<string>('');
+  const [availabilityError, setAvailabilityError] = useState<string>('');
   
   const today = new Date().toISOString().split('T')[0];
 
@@ -69,8 +71,27 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
     const getPart = (type: string) => parts.find(p => p.type === type)?.value;
     const endDateTime = `${getPart('year')}-${getPart('month')}-${getPart('day')}T${getPart('hour')}:${getPart('minute')}:${getPart('second')}+02:00`;
 
+    setAvailabilityError('');
+
     try {
-      // Save to DB — non-fatal, don't block on error
+      const result: BookingResult = await sendBookingEmails({
+        name: formData.name,
+        email: formData.email,
+        businessName: formData.businessName,
+        industry: formData.industry,
+        goals: formData.goals,
+        serviceType: formData.serviceType,
+        bookingDate: formData.bookingDate,
+        bookingTime: formData.bookingTime,
+      });
+
+      if (result.available === false) {
+        setAvailabilityError(result.message || 'That time slot is already taken. Please choose a different date or time.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Slot is available — save to DB (non-fatal)
       supabase.from('elevate_leads').insert({
         type: 'booking',
         name: formData.name,
@@ -83,24 +104,13 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
         booking_time: formData.bookingTime,
       }).then(({ error }) => { if (error) console.warn('Lead save failed:', error.message); });
 
-      // Send emails — also non-fatal
-      await sendBookingEmails({
-        name: formData.name,
-        email: formData.email,
-        businessName: formData.businessName,
-        industry: formData.industry,
-        goals: formData.goals,
-        serviceType: formData.serviceType,
-        bookingDate: formData.bookingDate,
-        bookingTime: formData.bookingTime,
-      });
-
       setWebhookResponse(`Your ${formData.serviceType} has been booked for ${formData.bookingDate} at ${formData.bookingTime} SAST.\n\nWe'll send a confirmation to ${formData.email} shortly.`);
-    } catch {
-      // Emails failed but booking intent is clear — still show success
-      setWebhookResponse(`Your ${formData.serviceType} request has been received.\n\nOur team will reach out to ${formData.email} to confirm your appointment.`);
-    } finally {
       setSubmitted(true);
+    } catch {
+      // Network error — still show success so the user isn't stuck
+      setWebhookResponse(`Your ${formData.serviceType} request has been received.\n\nOur team will reach out to ${formData.email} to confirm your appointment.`);
+      setSubmitted(true);
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -320,7 +330,14 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
                   ></textarea>
                 </div>
 
-                <button 
+                {availabilityError && (
+                  <div className="flex items-start gap-3 bg-red-50 border border-red-200 text-red-700 px-5 py-4 rounded-xl text-sm font-medium">
+                    <span className="text-red-500 mt-0.5">⚠</span>
+                    <span>{availabilityError}</span>
+                  </div>
+                )}
+
+                <button
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full py-5 bg-[#0a1a35] hover:bg-blue-700 text-white rounded-xl font-bold transition-all shadow-lg flex items-center justify-center gap-3 disabled:bg-slate-400"

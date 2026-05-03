@@ -1,3 +1,10 @@
+export interface BookingResult {
+  success?: boolean;
+  available?: boolean;
+  message?: string;
+  error?: string;
+}
+
 export async function sendBookingEmails(data: {
   name: string;
   email: string;
@@ -7,12 +14,13 @@ export async function sendBookingEmails(data: {
   serviceType: string;
   bookingDate: string;
   bookingTime: string;
-}): Promise<void> {
-  await fetch('/api/send-booking', {
+}): Promise<BookingResult> {
+  const res = await fetch('/api/send-booking', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
+  return res.json();
 }
 
 export async function sendContactNotification(data: {

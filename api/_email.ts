@@ -51,7 +51,7 @@ export async function sendEmail(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'ElevateAI Solutions Limited <noreply@elevateaisolutionsagency.com>',
+      from: 'ElevateAI Solutions Limited <support@elevateaisolutionsagency.com>',
       to: Array.isArray(to) ? to : [to],
       subject,
       html,

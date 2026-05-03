@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { google } from 'googleapis';
 import { wrap, row, sendEmail } from './_email';
 
 function getAdmins(serviceType: string): string[] {
@@ -7,12 +8,80 @@ function getAdmins(serviceType: string): string[] {
   return ['danielkimara7@gmail.com', 'kicaben5@gmail.com']; // Consultation
 }
 
+async function checkOneCalendar(
+  serviceAccountJson: string,
+  calendarId: string,
+  bookingDate: string,
+  bookingTime: string
+): Promise<boolean> {
+  const credentials = JSON.parse(serviceAccountJson);
+  const auth = new google.auth.GoogleAuth({
+    credentials,
+    scopes: ['https://www.googleapis.com/auth/calendar.readonly'],
+  });
+  const calendar = google.calendar({ version: 'v3', auth });
+
+  const startISO = `${bookingDate}T${bookingTime}:00+02:00`;
+  const start = new Date(startISO);
+  const end = new Date(start.getTime() + 60 * 60 * 1000);
+
+  const { data } = await calendar.freebusy.query({
+    requestBody: {
+      timeMin: start.toISOString(),
+      timeMax: end.toISOString(),
+      timeZone: 'Africa/Johannesburg',
+      items: [{ id: calendarId }],
+    },
+  });
+
+  const busy = data.calendars?.[calendarId]?.busy ?? [];
+  return busy.length === 0;
+}
+
+async function isSlotAvailable(serviceType: string, bookingDate: string, bookingTime: string): Promise<boolean> {
+  const danielJson  = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+  const danielCal   = process.env.GOOGLE_CALENDAR_ID;
+  const broJson     = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BRO;
+  const broCal      = process.env.GOOGLE_CALENDAR_ID_BRO;
+
+  // Determine which calendars to check based on who handles this service
+  const checkDaniel = serviceType !== 'AI Voice Agent';
+  const checkBro    = serviceType !== 'AI Automation';
+
+  try {
+    const checks: Promise<boolean>[] = [];
+
+    if (checkDaniel && danielJson && danielCal)
+      checks.push(checkOneCalendar(danielJson, danielCal, bookingDate, bookingTime));
+
+    if (checkBro && broJson && broCal)
+      checks.push(checkOneCalendar(broJson, broCal, bookingDate, bookingTime));
+
+    if (checks.length === 0) return true; // no calendars configured → allow all
+
+    const results = await Promise.all(checks);
+    return results.every(Boolean); // all checked calendars must be free
+  } catch (err: any) {
+    console.error('Calendar check error:', err.message);
+    return true; // fail open — don't block booking
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { name, email, businessName, industry, goals, serviceType, bookingDate, bookingTime } = req.body;
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'Email not configured' });
+
+  // Check calendar availability
+  const available = await isSlotAvailable(serviceType, bookingDate, bookingTime);
+  if (!available) {
+    return res.status(200).json({
+      available: false,
+      message: `That time slot is already taken. Please choose a different date or time.`,
+    });
+  }
 
   const formattedDate = new Date(`${bookingDate}T${bookingTime}:00+02:00`)
     .toLocaleDateString('en-ZA', {
