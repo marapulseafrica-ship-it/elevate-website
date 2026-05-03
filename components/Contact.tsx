@@ -22,7 +22,7 @@ const Contact: React.FC = () => {
     setError(null);
 
     try {
-      await sendContactNotification({
+      const result = await sendContactNotification({
         name: formData.name,
         email: formData.email,
         business: formData.business,
@@ -30,12 +30,14 @@ const Contact: React.FC = () => {
         message: formData.message,
       });
 
-      setSubmitted(true);
-      setFormData({ name: '', email: '', phone: '', business: '', message: '' });
-    } catch {
-      // Still show success — message intent is captured
-      setSubmitted(true);
-      setFormData({ name: '', email: '', phone: '', business: '', message: '' });
+      if (result.error) {
+        setError(`Server error: ${result.error}`);
+      } else {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', phone: '', business: '', message: '' });
+      }
+    } catch (err: any) {
+      setError(`Request failed: ${err.message}`);
     } finally {
       setIsSending(false);
     }

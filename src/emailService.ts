@@ -30,10 +30,11 @@ export async function sendContactNotification(data: {
   business: string;
   phone?: string;
   message: string;
-}): Promise<void> {
-  await fetch('/api/send-contact', {
+}): Promise<{ success?: boolean; error?: string }> {
+  const res = await fetch('/api/send-contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
+  return res.json();
 }
