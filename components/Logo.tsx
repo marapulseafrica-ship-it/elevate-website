@@ -27,10 +27,11 @@ const Logo: React.FC<LogoProps> = ({ className = "h-12 w-auto", variant = 'dark'
 
       {/* ElevateAI */}
       <text
-        x="58" y="44"
+        x="58" y="45"
         fontFamily="Inter, Arial, sans-serif"
-        fontWeight="800" fontSize="34"
-        fill={textColor} letterSpacing="-0.5"
+        fontWeight="900" fontSize="38"
+        fill={textColor} letterSpacing="-1"
+        style={{ fontStretch: 'condensed' }}
       >ElevateAI</text>
 
       {/* SOLUTIONS LIMITED */}
