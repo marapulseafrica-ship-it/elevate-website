@@ -201,11 +201,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await Promise.all([
       sendEmail(apiKey, getAdmins(serviceType), `New ${serviceType} Booked — ${name} (${businessName})`, adminHtml),
       sendEmail(apiKey, email, `Your ${serviceType} is Confirmed — ElevateAI Solutions Limited`, clientHtml),
-      addToCalendars(serviceType, name, businessName, goals, bookingDate, bookingTime),
     ]);
-    res.status(200).json({ success: true });
   } catch (err: any) {
     console.error('Email error:', err.message);
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
+
+  // Calendar event creation is non-fatal — don't block the booking if it fails
+  addToCalendars(serviceType, name, businessName, goals, bookingDate, bookingTime)
+    .catch((err: any) => console.error('Calendar event creation failed:', err.message));
+
+  res.status(200).json({ success: true });
 }
