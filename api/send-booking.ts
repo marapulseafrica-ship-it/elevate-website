@@ -15,11 +15,13 @@ function formatTime(time: string): string {
   return `${hour}:${m.toString().padStart(2, '0')} ${period} SAST`;
 }
 
-function buildAuth(serviceAccountJson: string) {
+function buildAuth(serviceAccountJson: string, readonly = false) {
   const credentials = JSON.parse(serviceAccountJson);
   return new google.auth.GoogleAuth({
     credentials,
-    scopes: ['https://www.googleapis.com/auth/calendar'],
+    scopes: [readonly
+      ? 'https://www.googleapis.com/auth/calendar.readonly'
+      : 'https://www.googleapis.com/auth/calendar'],
   });
 }
 
@@ -29,7 +31,7 @@ async function checkOneCalendar(
   bookingDate: string,
   bookingTime: string
 ): Promise<boolean> {
-  const auth = buildAuth(serviceAccountJson);
+  const auth = buildAuth(serviceAccountJson, true); // readonly scope for freebusy
   const calendar = google.calendar({ version: 'v3', auth });
 
   const startISO = `${bookingDate}T${bookingTime}:00+02:00`;
@@ -57,7 +59,7 @@ async function createCalendarEvent(
   bookingDate: string,
   bookingTime: string
 ): Promise<void> {
-  const auth = buildAuth(serviceAccountJson);
+  const auth = buildAuth(serviceAccountJson, false); // write scope for event creation
   const calendar = google.calendar({ version: 'v3', auth });
 
   const startISO = `${bookingDate}T${bookingTime}:00+02:00`;
@@ -84,19 +86,16 @@ async function isSlotAvailable(serviceType: string, bookingDate: string, booking
   const checkDaniel = serviceType !== 'AI Voice Agent';
   const checkBro    = serviceType !== 'AI Automation';
 
-  try {
-    const checks: Promise<boolean>[] = [];
-    if (checkDaniel && danielJson && danielCal)
-      checks.push(checkOneCalendar(danielJson, danielCal, bookingDate, bookingTime));
-    if (checkBro && broJson && broCal)
-      checks.push(checkOneCalendar(broJson, broCal, bookingDate, bookingTime));
-    if (checks.length === 0) return true;
-    const results = await Promise.all(checks);
-    return results.every(Boolean);
-  } catch (err: any) {
-    console.error('Calendar check error:', err.message);
-    return true;
-  }
+  const checks: Promise<boolean>[] = [];
+  if (checkDaniel && danielJson && danielCal)
+    checks.push(checkOneCalendar(danielJson, danielCal, bookingDate, bookingTime));
+  if (checkBro && broJson && broCal)
+    checks.push(checkOneCalendar(broJson, broCal, bookingDate, bookingTime));
+  if (checks.length === 0) return true; // no calendars configured → allow all
+
+  // Let errors bubble up so the handler can return them to the client
+  const results = await Promise.all(checks);
+  return results.every(Boolean);
 }
 
 async function addToCalendars(
@@ -135,7 +134,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!apiKey) return res.status(500).json({ error: 'Email not configured' });
 
   // Check calendar availability
-  const available = await isSlotAvailable(serviceType, bookingDate, bookingTime);
+  let available: boolean;
+  try {
+    available = await isSlotAvailable(serviceType, bookingDate, bookingTime);
+  } catch (err: any) {
+    console.error('Availability check failed:', err.message);
+    return res.status(500).json({ error: `Calendar check failed: ${err.message}` });
+  }
+
   if (!available) {
     return res.status(200).json({
       available: false,
