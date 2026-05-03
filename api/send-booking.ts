@@ -61,8 +61,16 @@ async function addToCalendars(serviceType: string, name: string, businessName: s
   const summary     = `${serviceType} — ${name} (${businessName})`;
   const description = `Service: ${serviceType}\nClient: ${name}\nBusiness: ${businessName}\nGoals: ${goals}`;
   const creates: Promise<void>[] = [];
-  if (addDaniel && danielJson && danielCal) creates.push(createCalendarEvent(danielJson, danielCal, summary, description, bookingDate, bookingTime));
-  if (addBro && broJson && broCal) creates.push(createCalendarEvent(broJson, broCal, summary, description, bookingDate, bookingTime));
+
+  if (addDaniel) {
+    if (!danielJson || !danielCal) throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON or GOOGLE_CALENDAR_ID not set in Vercel');
+    creates.push(createCalendarEvent(danielJson, danielCal, summary, description, bookingDate, bookingTime));
+  }
+  if (addBro) {
+    if (!broJson || !broCal) throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON_BRO or GOOGLE_CALENDAR_ID_BRO not set in Vercel');
+    creates.push(createCalendarEvent(broJson, broCal, summary, description, bookingDate, bookingTime));
+  }
+
   await Promise.all(creates);
 }
 
