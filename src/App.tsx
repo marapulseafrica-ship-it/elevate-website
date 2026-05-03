@@ -122,7 +122,7 @@ const App: React.FC = () => {
           </div>
 
           <div className="pt-8 border-t border-blue-900/30 flex flex-col md:flex-row justify-center items-center gap-4 text-blue-200/50 text-xs text-center">
-            <p>© 2026 ElevateAI Solutions Agency. All rights reserved.</p>
+            <p>© 2026 ElevateAI Solutions Limited. All rights reserved.</p>
           </div>
         </div>
       </footer>

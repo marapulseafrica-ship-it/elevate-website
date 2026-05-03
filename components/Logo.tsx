@@ -7,55 +7,39 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ className = "h-12 w-auto", variant = 'dark' }) => {
-  const primaryColor = variant === 'light' ? '#ffffff' : '#0a1a35';
-  const secondaryColor = variant === 'light' ? 'rgba(255,255,255,0.7)' : '#666666';
+  const textColor  = variant === 'light' ? '#ffffff'                 : '#0a1a35';
+  const barLight   = variant === 'light' ? 'rgba(176,184,232,0.9)'   : '#7b8ec8';
+  const barBright  = variant === 'light' ? '#ffffff'                 : '#0a1a35';
+  const subColor   = variant === 'light' ? 'rgba(176,184,232,0.85)'  : '#8899cc';
 
   return (
-    <svg 
-      viewBox="0 0 320 80" 
+    <svg
+      viewBox="0 0 300 72"
       className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Icon: Bar Chart with Arrow */}
-      <g transform="translate(10, 15)">
-        {/* Bars */}
-        <rect x="15" y="35" width="10" height="15" rx="1.5" fill={primaryColor} />
-        <rect x="30" y="25" width="10" height="25" rx="1.5" fill={primaryColor} />
-        <rect x="45" y="15" width="10" height="35" rx="1.5" fill={primaryColor} />
-        
-        {/* Arrow */}
-        <path 
-          d="M5 45 L55 5 L40 5 L40 0 L65 0 L65 25 L60 25 L60 10 L10 50 Z" 
-          fill={primaryColor}
-          fillRule="evenodd"
-        />
+      {/* Bar-chart icon — 3 rising bars (matches brand logo) */}
+      <g transform="translate(6, 10)">
+        <rect x="0"  y="30" width="9" height="14" rx="1.5" fill={barLight}  />
+        <rect x="14" y="20" width="9" height="24" rx="1.5" fill={barLight}  />
+        <rect x="28" y="8"  width="9" height="36" rx="1.5" fill={barBright} />
       </g>
 
-      {/* Text: ElevateAI */}
-      <text 
-        x="85" 
-        y="45" 
-        fontFamily="Inter, sans-serif" 
-        fontWeight="700" 
-        fontSize="38" 
-        fill={primaryColor}
-        letterSpacing="-1"
-      >
-        ElevateAI
-      </text>
+      {/* ElevateAI */}
+      <text
+        x="58" y="44"
+        fontFamily="Inter, Arial, sans-serif"
+        fontWeight="800" fontSize="34"
+        fill={textColor} letterSpacing="-0.5"
+      >ElevateAI</text>
 
-      {/* Subtext: SOLUTIONS AGENCY */}
-      <text 
-        x="85" 
-        y="68" 
-        fontFamily="Inter, sans-serif" 
-        fontWeight="600" 
-        fontSize="12" 
-        fill={secondaryColor}
-        letterSpacing="0.25em"
-      >
-        SOLUTIONS AGENCY
-      </text>
+      {/* SOLUTIONS LIMITED */}
+      <text
+        x="59" y="62"
+        fontFamily="Inter, Arial, sans-serif"
+        fontWeight="600" fontSize="11"
+        fill={subColor} letterSpacing="2.5"
+      >SOLUTIONS LIMITED</text>
     </svg>
   );
 };

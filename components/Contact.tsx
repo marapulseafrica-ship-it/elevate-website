@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MessageSquare, Clock, Send, CheckCircle2, Loader2 } from 'lucide-react';
 import { supabase } from '../src/supabaseClient';
-import { notifyAdmin } from '../src/emailService';
+import { sendContactNotification } from '../src/emailService';
 
 const Contact: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -34,19 +34,13 @@ const Contact: React.FC = () => {
 
       if (dbError) throw new Error(dbError.message);
 
-      await notifyAdmin(
-        `New Contact: ${formData.name} from ${formData.business}`,
-        `<div style="font-family:sans-serif;max-width:520px;margin:auto;padding:24px;">
-          <h2 style="color:#0a1a35;">New Contact Form Submission</h2>
-          <table style="width:100%;font-size:14px;border-collapse:collapse;">
-            <tr><td style="padding:8px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Name</td><td style="padding:8px 0;font-weight:600;text-align:right;border-bottom:1px solid #f1f5f9;">${formData.name}</td></tr>
-            <tr><td style="padding:8px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Email</td><td style="padding:8px 0;font-weight:600;text-align:right;border-bottom:1px solid #f1f5f9;">${formData.email}</td></tr>
-            <tr><td style="padding:8px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Phone</td><td style="padding:8px 0;font-weight:600;text-align:right;border-bottom:1px solid #f1f5f9;">${formData.phone || '—'}</td></tr>
-            <tr><td style="padding:8px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Business</td><td style="padding:8px 0;font-weight:600;text-align:right;border-bottom:1px solid #f1f5f9;">${formData.business}</td></tr>
-          </table>
-          <p style="margin-top:16px;color:#1e293b;"><strong>Message:</strong><br>${formData.message}</p>
-        </div>`
-      );
+      await sendContactNotification({
+        name: formData.name,
+        email: formData.email,
+        business: formData.business,
+        phone: formData.phone || undefined,
+        message: formData.message,
+      });
 
       setSubmitted(true);
       setFormData({ name: '', email: '', phone: '', business: '', message: '' });

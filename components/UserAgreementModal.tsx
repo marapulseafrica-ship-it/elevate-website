@@ -128,7 +128,7 @@ const UserAgreementModal: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-gray-50 p-6 rounded-2xl">
               <div>
                 <span className="font-bold block">Company Name</span>
-                ElevateAI Solutions Agency
+                ElevateAI Solutions Limited
               </div>
               <div>
                 <span className="font-bold block">Email</span>

@@ -71,7 +71,7 @@ const TermsOfService: React.FC = () => {
               </svg>
               <div className="text-left">
                 <div className="text-[32pt] font-black leading-none text-[#0a1a35]">ElevateAI</div>
-                <div className="text-[10pt] font-bold tracking-[0.3em] uppercase text-[#0a1a35]">SOLUTIONS AGENCY</div>
+                <div className="text-[10pt] font-bold tracking-[0.3em] uppercase text-[#0a1a35]">SOLUTIONS LIMITED</div>
               </div>
             </div>
           </div>
@@ -151,12 +151,12 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 5: SECTIONS 1 & 2 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           
           <h2 className="text-[18pt] font-bold text-[#0a1a35] mb-6">1. Introduction and Acceptance of Terms</h2>
           <div className="space-y-4 text-justify">
-            <p>Welcome to ElevateAI Solutions Agency ("Company", "we", "us", or "our"). These Terms of Service ("Terms") govern your access to and use of our artificial intelligence automation services, voice agent solutions, and related technologies (collectively, the "Services") provided through our website <span className="text-blue-600 underline">www.elevateaisolutionsagency.com</span> (the "Website") and any associated platforms or applications.</p>
+            <p>Welcome to ElevateAI Solutions Limited ("Company", "we", "us", or "our"). These Terms of Service ("Terms") govern your access to and use of our artificial intelligence automation services, voice agent solutions, and related technologies (collectively, the "Services") provided through our website <span className="text-blue-600 underline">www.elevateaisolutionsagency.com</span> (the "Website") and any associated platforms or applications.</p>
             <p>By accessing our Website, engaging our Services, or entering into a service agreement with us, you ("Client", "you", or "your") acknowledge that you have read, understood, and agree to be bound by these Terms, together with our Privacy Policy and any supplementary terms or service-level agreements ("SLAs") that may apply.</p>
             <p>These Terms are governed by and shall be interpreted in accordance with the laws of the Republic of Zambia and the Republic of South Africa, as applicable to the Client's jurisdiction of operation or residence. If you do not agree to these Terms, you must not access or use our Services.</p>
           </div>
@@ -177,7 +177,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 6: SECTIONS 3 & 4 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           
           <h2 className="text-[18pt] font-bold text-[#0a1a35] mb-6">3. Description of Services</h2>
@@ -220,7 +220,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 7: SECTIONS 4 & 5 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           <ol className="list-decimal pl-10 space-y-3 text-justify" start={2}>
             <li>Designate a primary point of contact who has the authority to make decisions and provide approvals on behalf of the Client.</li>
@@ -257,7 +257,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 8: SECTIONS 5, 6 & 7 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           <h3 className="text-[14pt] font-bold text-[#0a1a35] mb-4">5.4 Taxes</h3>
           <p className="mb-8 text-justify">The Client shall be responsible for all applicable taxes, including VAT (currently 15% in South Africa and 16% in Zambia), withholding taxes, and any other levies arising from the use of the Services. The Company will provide valid tax invoices in compliance with the relevant jurisdiction's requirements.</p>
@@ -293,7 +293,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 9: SECTIONS 7 & 8 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           <ul className="list-disc pl-10 space-y-2 mb-8">
             <li>The Electronic Communications and Transactions Act 25 of 2002 (ECTA) of South Africa</li>
@@ -332,7 +332,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 10: SECTIONS 8 & 9 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           <p className="mb-6 text-justify">Each party (the "Receiving Party") agrees to keep confidential all non-public information disclosed by the other party (the "Disclosing Party") in connection with the Services ("Confidential Information"). Confidential Information includes, but is not limited to, business strategies, customer lists, technical specifications, pricing information, AI models, training data, and proprietary algorithms.</p>
           <p className="mb-4">The Receiving Party shall:</p>
@@ -365,7 +365,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 11: SECTIONS 9, 10 & 11 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           <ul className="list-disc pl-10 space-y-3 mb-8">
             <li className="text-justify">The Company is not liable for the actions, decisions, or outcomes resulting from the Client's reliance on AI-generated recommendations, voice agent interactions, or automated processes without appropriate human oversight.</li>
@@ -397,7 +397,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 12: SECTIONS 11, 12 & 13 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           <ul className="list-disc pl-10 space-y-3 mb-12">
             <li className="text-justify">Any content, data, or materials provided by the Client that infringe the intellectual property rights of a third party.</li>
@@ -437,7 +437,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 13: SECTIONS 13 & 14 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           <ul className="list-disc pl-10 space-y-3 mb-8">
             <li className="text-justify">The Services utilise artificial intelligence technologies that are probabilistic in nature and may produce unexpected, inaccurate, or incomplete outputs.</li>
@@ -474,7 +474,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 14: SECTIONS 14, 15 & 16 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           
           <h3 className="text-[14pt] font-bold text-[#0a1a35] mb-4">14.1 Zambia</h3>
@@ -510,7 +510,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 15: SECTIONS 16, 17 & 18 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           <p className="mb-8 text-justify">performance as soon as reasonably practicable. If a Force Majeure Event continues for more than sixty (60) days, either party may terminate the affected SOW or these Terms upon written notice.</p>
 
@@ -547,7 +547,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 16: SECTIONS 18 & 19 */}
         <div className="min-h-[9.5in] pt-8 page-break-after">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           <ul className="list-disc pl-10 space-y-3 mb-12">
             <li className="text-justify">For Clients domiciled or registered in South Africa: the laws of the Republic of South Africa, and the parties submit to the exclusive jurisdiction of the courts of the Republic of South Africa.</li>
@@ -578,7 +578,7 @@ const TermsOfService: React.FC = () => {
         {/* PAGE 17: SECTIONS 19 & 20 */}
         <div className="min-h-[9.5in] pt-8">
           <div className="text-right text-slate-400 italic text-[9pt] mb-8 border-b border-slate-100 pb-1">
-            Terms of Service | ElevateAI Solutions Agency]
+            Terms of Service | ElevateAI Solutions Limited]
           </div>
           <p className="mb-8 text-justify">(a) upon confirmed delivery if by email; (b) five (5) business days after posting if by registered post; or (c) upon delivery if by personal delivery.</p>
 
@@ -595,7 +595,7 @@ const TermsOfService: React.FC = () => {
           <p className="mb-8 text-justify">For any questions, concerns, or requests relating to these Terms or our Services, please contact us at:</p>
 
           <div className="bg-slate-50 p-10 rounded-3xl border border-slate-100 mb-20">
-            <p className="text-[14pt] font-bold text-[#0a1a35] mb-4">ElevateAI Solutions Agency</p>
+            <p className="text-[14pt] font-bold text-[#0a1a35] mb-4">ElevateAI Solutions Limited</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-[10pt]">
               <div>
                 <span className="font-bold block uppercase tracking-tighter text-slate-400 text-[8pt] mb-1">Office Locations</span>

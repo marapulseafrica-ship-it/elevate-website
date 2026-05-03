@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Workflow, Mic, ArrowRight, ArrowLeft, CheckCircle2, Loader2, Send, Building2, MessageSquare, Calendar, Clock, Search } from 'lucide-react';
 import { supabase } from '../src/supabaseClient';
-import { notifyAdmin } from '../src/emailService';
+import { sendBookingEmails } from '../src/emailService';
 
 interface BookingPageProps {
   initialService?: string;
@@ -84,21 +84,16 @@ const BookingPage: React.FC<BookingPageProps> = ({ initialService, onReturnHome 
 
       if (dbError) throw new Error(dbError.message);
 
-      await notifyAdmin(
-        `New Booking: ${formData.name} — ${formData.serviceType}`,
-        `<div style="font-family:sans-serif;max-width:520px;margin:auto;padding:24px;">
-          <h2 style="color:#0a1a35;">New Booking Request</h2>
-          <table style="width:100%;font-size:14px;border-collapse:collapse;">
-            <tr><td style="padding:8px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Service</td><td style="padding:8px 0;font-weight:600;text-align:right;border-bottom:1px solid #f1f5f9;">${formData.serviceType}</td></tr>
-            <tr><td style="padding:8px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Name</td><td style="padding:8px 0;font-weight:600;text-align:right;border-bottom:1px solid #f1f5f9;">${formData.name}</td></tr>
-            <tr><td style="padding:8px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Email</td><td style="padding:8px 0;font-weight:600;text-align:right;border-bottom:1px solid #f1f5f9;">${formData.email}</td></tr>
-            <tr><td style="padding:8px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Business</td><td style="padding:8px 0;font-weight:600;text-align:right;border-bottom:1px solid #f1f5f9;">${formData.businessName}</td></tr>
-            <tr><td style="padding:8px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Industry</td><td style="padding:8px 0;font-weight:600;text-align:right;border-bottom:1px solid #f1f5f9;">${formData.industry}</td></tr>
-            <tr><td style="padding:8px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Date</td><td style="padding:8px 0;font-weight:600;text-align:right;border-bottom:1px solid #f1f5f9;">${formData.bookingDate} at ${formData.bookingTime} SAST</td></tr>
-          </table>
-          <p style="margin-top:16px;color:#1e293b;"><strong>Goals:</strong><br>${formData.goals}</p>
-        </div>`
-      );
+      await sendBookingEmails({
+        name: formData.name,
+        email: formData.email,
+        businessName: formData.businessName,
+        industry: formData.industry,
+        goals: formData.goals,
+        serviceType: formData.serviceType,
+        bookingDate: formData.bookingDate,
+        bookingTime: formData.bookingTime,
+      });
 
       setWebhookResponse(`Your ${formData.serviceType} has been booked for ${formData.bookingDate} at ${formData.bookingTime} SAST.\n\nWe'll send a confirmation to ${formData.email} shortly.`);
       setSubmitted(true);

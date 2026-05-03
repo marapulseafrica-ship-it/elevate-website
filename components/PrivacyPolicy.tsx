@@ -72,12 +72,12 @@ const PrivacyPolicy: React.FC = () => {
             </svg>
             <div className="text-left font-sans">
               <div className="text-[38pt] font-black leading-none text-[#0a1a35]">ElevateAI</div>
-              <div className="text-[11pt] font-bold tracking-[0.4em] uppercase text-[#0a1a35] mt-1">SOLUTIONS AGENCY</div>
+              <div className="text-[11pt] font-bold tracking-[0.4em] uppercase text-[#0a1a35] mt-1">SOLUTIONS LIMITED</div>
             </div>
           </div>
 
           <div className="w-full mt-auto space-y-1.5 text-[9pt] font-sans text-slate-500 bg-slate-50 p-8 rounded-2xl border border-slate-100">
-            <p>Document Reference: <strong className="text-slate-900">ElevateAI Solutions Agency-POL-001</strong></p>
+            <p>Document Reference: <strong className="text-slate-900">ElevateAI Solutions Limited-POL-001</strong></p>
             <p>Version: <strong className="text-slate-900">1.0</strong></p>
             <p>Effective Date: <strong className="text-slate-900">17/02.2026</strong></p>
             <p>Classification: <strong className="text-red-700">CONFIDENTIAL</strong></p>
@@ -90,7 +90,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 2 & 3: TABLE OF CONTENTS */}
         <div className="min-h-[10.5in] p-12 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-10 border-b border-slate-100 pb-1 uppercase tracking-widest font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
           
@@ -203,13 +203,13 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 5: 1. INTRODUCTION AND PURPOSE */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
           <h2 className="text-[20pt] font-bold text-[#0a1a35] mb-8 border-b-2 border-slate-900 pb-1">1. Introduction and Purpose</h2>
           <div className="space-y-6 text-justify leading-relaxed text-[10.5pt]">
-            <p>This policy establishes the governance framework, operational standards, and compliance obligations for ElevateAI Solutions Agency (hereinafter referred to as “the Company”) in the provision of artificial intelligence automation services and AI-powered voice agent solutions.</p>
+            <p>This policy establishes the governance framework, operational standards, and compliance obligations for ElevateAI Solutions Limited (hereinafter referred to as “the Company”) in the provision of artificial intelligence automation services and AI-powered voice agent solutions.</p>
             <p>The Company operates across the Republic of Zambia and the Republic of South Africa. This policy ensures that all operations comply with the applicable laws, regulations, and ethical standards of both jurisdictions, and that the rights and interests of clients, data subjects, and the public are protected.</p>
             <p>This policy is binding on all directors, officers, employees, contractors, sub-processors, and third-party partners who act on behalf of, or in association with, the Company.</p>
             
@@ -231,7 +231,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 6: 2. DEFINITIONS AND INTERPRETATION */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -268,7 +268,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 7: 3. LEGAL AND REGULATORY FRAMEWORK */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -355,7 +355,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 8: 4. SCOPE AND APPLICATION */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -379,7 +379,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 9: 5. DATA PROTECTION AND PRIVACY */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -414,7 +414,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 10: 5.3 SOUTH AFRICA-SPECIFIC OBLIGATIONS */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -441,7 +441,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 11: 6. VOICE AGENT OPERATIONS POLICY */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -489,7 +489,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 12: 6.3 - 6.5 */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -540,7 +540,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 13: 6.6 QUALITY ASSURANCE */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -556,7 +556,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 14: 7. RESPONSIBLE AI AND ETHICS POLICY */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -599,7 +599,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 15: 8. CROSS-BORDER DATA TRANSFERS */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -633,7 +633,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 16: 9. INFORMATION SECURITY */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -670,7 +670,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 17: 10. DATA BREACH NOTIFICATION */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -710,7 +710,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 18: 11. DATA RETENTION AND DELETION */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -752,7 +752,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 19: 12. CLIENT AND THIRD-PARTY OBLIGATIONS */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -779,7 +779,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 20: 13. MARKETING AND OUTBOUND COMMUNICATIONS */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -818,7 +818,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 21: 14. AI CONTENT LABELLING */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -851,7 +851,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 22: 15. EMPLOYEE AND CONTRACTOR OBLIGATIONS */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -878,7 +878,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 23: 16. COMPLAINTS AND DISPUTE RESOLUTION */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -906,7 +906,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 24: 17. INTELLECTUAL PROPERTY */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -926,7 +926,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 25: 18. GOVERNANCE, REVIEW, AND AMENDMENTS */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -970,7 +970,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 26: 19. REGULATORY REGISTRATION CHECKLISTS */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -1071,7 +1071,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* PAGE 27: 20. PENALTIES AND ENFORCEMENT SUMMARY */}
         <div className="min-h-[10.5in] p-16 relative page-break-after">
           <div className="flex justify-between items-center text-[8pt] text-slate-400 mb-12 border-b border-slate-100 pb-1 font-sans">
-            <span>ElevateAI Solutions Agency</span>
+            <span>ElevateAI Solutions Limited</span>
             <span>Policy | POL-001 | v1.0</span>
           </div>
 
@@ -1127,7 +1127,7 @@ const PrivacyPolicy: React.FC = () => {
           <p className="text-[20pt] font-black tracking-[0.4em] text-[#0a1a35] uppercase mb-8">— END OF POLICY DOCUMENT —</p>
           
           <div className="max-w-2xl text-[10pt] text-slate-500 space-y-6 italic leading-relaxed text-justify mb-24">
-            <p>This document is the exclusive property of ElevateAI Solutions Agency and is classified as <strong className="text-red-600 uppercase font-black tracking-widest text-[11pt]">CONFIDENTIAL</strong>. Any unauthorised reproduction, disclosure, or distribution in any form is strictly prohibited.</p>
+            <p>This document is the exclusive property of ElevateAI Solutions Limited and is classified as <strong className="text-red-600 uppercase font-black tracking-widest text-[11pt]">CONFIDENTIAL</strong>. Any unauthorised reproduction, disclosure, or distribution in any form is strictly prohibited.</p>
           </div>
 
           <div className="grid grid-cols-2 gap-20 w-full max-w-2xl text-left font-sans">
@@ -1150,7 +1150,7 @@ const PrivacyPolicy: React.FC = () => {
           </div>
           
           <div className="mt-32 text-[8pt] font-sans text-slate-200 tracking-[0.5em] uppercase font-black">
-            ElevateAI SOLUTIONS AGENCY © 2024-2026
+            ElevateAI SOLUTIONS LIMITED © 2024-2026
           </div>
           
           <div className="absolute bottom-8 left-12 right-12 flex justify-between items-center text-[8pt] text-slate-300 font-sans">
